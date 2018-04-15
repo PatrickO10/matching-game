@@ -22,6 +22,18 @@ const displayCards = () => {
 
 displayCards();
 
+/*
+ * Restart the game when restart button is clicked
+ * 	- reset the cards
+ */
+const restartGame = () => {
+	$('.restart').click(function() {
+		displayCards();
+	});
+};
+
+restartGame();
+
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
     let currentIndex = array.length,
