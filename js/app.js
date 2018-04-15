@@ -4,19 +4,22 @@
 const card = $('.card');
 const cards = [...card];
 const deck = $('.deck');
+const movesEl = $('.moves');
 let openedCards = [];
+let moveCounter = 0;
+
 
 /*
  * Display the card that is clicked
  *  - add class show and open to the clicked card
  */
-const displayCard = () => $(event.target).addClass('show open')
+const displayCard = () => $(event.target).addClass('show open');
 
 /*
  * Add clicked card to the opened list
  *  - push the card to the list
  */
-const pushCard = () => openedCards.push($(event.target))
+const pushCard = () => openedCards.push($(event.target));
 
 
 /*
@@ -25,22 +28,39 @@ const pushCard = () => openedCards.push($(event.target))
 const compareOpenCards = () => {
     let cardOne = openedCards[0].children()[0].className,
         cardTwo = openedCards[1].children()[0].className;
-    if (cardOne !== cardTwo) {
-    	deck.addClass('no-pointer-events');
-    	$(openedCards[0]).addClass('animated wobble');
-    	$(openedCards[1]).addClass('animated wobble');
-    	setTimeout(function(){
-    		deck.find('.open').removeClass('show open animated wobble');
-    		deck.removeClass('no-pointer-events');
-    	}, 500);
+
+    if (cardOne === cardTwo) {
+        deck.find('.open').addClass('match animated rubberBand');
 
     } else {
-    	deck.find('.open').addClass('match animated rubberBand');
+        // Makes sure that user cannot keep clicking on cards
+        deck.addClass('no-pointer-events');
+        $(openedCards[0]).addClass('no-match animated wobble');
+        $(openedCards[1]).addClass('no-match animated wobble');
+        setTimeout(function() {
+            deck.find('.open').removeClass('no-match show open animated wobble');
+            deck.removeClass('no-pointer-events');
+        }, 500);
     }
     openedCards = [];
 }
+
+/*
+ * Display move counter onto the page
+ *  - update move counter
+ */
+const displayCounter = () => {
+    movesEl.html(moveCounter);
+    moveCounter++;
+};
+
+
 /*
  * Call functions when card is clicked
+ *  - display card
+ *  - push card to the array
+ *  - compare card
+ *  - display counter
  */
 const clickedCard = () => {
     displayCard();
@@ -48,6 +68,7 @@ const clickedCard = () => {
     if (openedCards.length === 2) {
         compareOpenCards();
     }
+    displayCounter();
 };
 
 /*
@@ -60,27 +81,34 @@ const displayCards = () => {
     let shuffledCards = shuffle(cards)
     shuffledCards.map(card => {
         deck.append($(card))
-        $(card).click(clickedCard);
+        $(card).unbind().click(clickedCard);
     });
 };
-
-displayCards();
 
 /*
  * Restart the game when restart button is clicked
  * 	- remove classes
  *  - reset the cards
  *  - set openedCards back to empty array
+ *  - reset the counter
  */
 const restartGame = () => {
-    $('.restart').click(function() {
-    	deck.find('.card').removeClass('show open match animated rubberBand wobble');
-        displayCards();
+    $('.restart').unbind().click(function() {
+        deck.find('.card').removeClass('show open match animated rubberBand wobble');
+        openedCards = [];
+        moveCounter = 0;
+        startGame();
+
     });
-    openedCards = [];
 };
 
-restartGame();
+const startGame = () => {
+    displayCards();
+    displayCounter();
+    restartGame();
+}
+
+startGame();
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -97,9 +125,6 @@ function shuffle(array) {
 
     return array;
 }
-
-
-
 
 
 /*
