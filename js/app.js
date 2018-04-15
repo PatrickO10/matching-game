@@ -1,7 +1,9 @@
 /*
  * Create a list that holds all of your cards
  */
-
+const card = $('.card');
+const cards = [...card];
+const deck = $('.deck');
 
 /*
  * Display the cards on the page
@@ -9,10 +11,21 @@
  *   - loop through each card and create its HTML
  *   - add each card's HTML to the page
  */
+const displayCards = () => {
+    let shuffledCards = shuffle(cards)
+    shuffledCards.map(card => {
+        $(card).removeClass('show open match');
+        $(card).addClass('show open');
+        deck.append($(card))
+    });
+};
+
+displayCards();
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
-    var currentIndex = array.length, temporaryValue, randomIndex;
+    let currentIndex = array.length,
+        temporaryValue, randomIndex;
 
     while (currentIndex !== 0) {
         randomIndex = Math.floor(Math.random() * currentIndex);
@@ -24,6 +37,9 @@ function shuffle(array) {
 
     return array;
 }
+
+
+
 
 
 /*
