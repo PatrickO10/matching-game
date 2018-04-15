@@ -6,6 +6,14 @@ const cards = [...card];
 const deck = $('.deck');
 
 /*
+ * Display the card that is clicked
+ *  - add class show and open to the clicked card
+ */
+const displayCard = (event) => {
+    $(event.target).addClass('show open');
+};
+
+/*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
  *   - loop through each card and create its HTML
@@ -15,8 +23,8 @@ const displayCards = () => {
     let shuffledCards = shuffle(cards)
     shuffledCards.map(card => {
         $(card).removeClass('show open match');
-        $(card).addClass('show open');
         deck.append($(card))
+        $(card).click(displayCard);
     });
 };
 
@@ -27,9 +35,9 @@ displayCards();
  * 	- reset the cards
  */
 const restartGame = () => {
-	$('.restart').click(function() {
-		displayCards();
-	});
+    $('.restart').click(function() {
+        displayCards();
+    });
 };
 
 restartGame();
