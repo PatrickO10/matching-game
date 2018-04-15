@@ -35,6 +35,9 @@ h1 {
 }
 
 
+
+
+
 /*
  * Styles for the deck of cards
  */
@@ -94,18 +97,19 @@ h1 {
 }
 
 
+
+
+
 /*
  * Styles for the Score Panel
  */
 
 .score-panel {
     text-align: left;
-    width: 345px;
-    margin-bottom: 10px;
+    width: 500px;
 }
 
 .score-panel .stars {
-    margin: 0;
     padding: 0;
     display: inline-block;
     margin: 0 5px 0 0;
@@ -118,5 +122,26 @@ h1 {
 
 .score-panel .restart {
     float: right;
+    cursor: pointer;
+
+}
+
+.score-panel .timer {
+    display: inline-block;
+    margin: 0 0 0 10px;
+
+}
+
+.score-panel .start-stop {
+    display: inline-block;
+    cursor: pointer;
+    margin: 0 10px 0 0;
+}
+
+.start,
+.stop {
+    padding: 1px;
+    margin: 0 5px;
+    display: inline-block;
     cursor: pointer;
 }

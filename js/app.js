@@ -5,8 +5,11 @@ const card = $('.card');
 const cards = [...card];
 const deck = $('.deck');
 const movesEl = $('.moves');
+const timerEl = $('.timer');
 let openedCards = [];
 let moveCounter = 0;
+let timeCounter = 0;
+let restart = false;
 
 
 /*
@@ -54,6 +57,24 @@ const displayCounter = () => {
     moveCounter++;
 };
 
+/*
+ * Display timer
+ */
+const displayTimer = () => {
+    let timer = setInterval(function() {
+        timeCounter++;
+        timerEl.html(timeCounter);
+    }, 1000);
+
+    if (restart) {
+        clearInterval(timer);
+        restart = false;
+        timeCounter = 0;
+        timerEl.html(timeCounter);
+    }
+
+};
+
 
 /*
  * Call functions when card is clicked
@@ -97,18 +118,39 @@ const restartGame = () => {
         deck.find('.card').removeClass('show open match animated rubberBand wobble');
         openedCards = [];
         moveCounter = 0;
-        startGame();
-
+        restart = true;
+        initGame();
     });
 };
 
-const startGame = () => {
+const initGame = () => {
     displayCards();
     displayCounter();
+    displayTimer();
+    stopGame();
+};
+
+const stopGame = () => {
+    $('.stop').unbind().click(function() {
+        location.reload();
+    });
+};
+
+/*
+ * Start the game when start button is clicked
+ *   - make sure user cannot click start button again.
+ */
+const startGame = () => {
+    $('.start').unbind().click(function() {
+        initGame();
+        $('.start').addClass('no-pointer-events');
+    });
     restartGame();
 }
 
 startGame();
+
+
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
