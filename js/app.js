@@ -4,13 +4,50 @@
 const card = $('.card');
 const cards = [...card];
 const deck = $('.deck');
+let openedCards = [];
 
 /*
  * Display the card that is clicked
  *  - add class show and open to the clicked card
  */
-const displayCard = (event) => {
-    $(event.target).addClass('show open');
+const displayCard = () => $(event.target).addClass('show open')
+
+/*
+ * Add clicked card to the opened list
+ *  - push the card to the list
+ */
+const pushCard = () => openedCards.push($(event.target))
+
+
+/*
+ * Compares if the two open cards are a match
+ */
+const compareOpenCards = () => {
+    let cardOne = openedCards[0].children()[0].className,
+        cardTwo = openedCards[1].children()[0].className;
+    if (cardOne !== cardTwo) {
+    	deck.addClass('no-pointer-events');
+    	$(openedCards[0]).addClass('animated wobble');
+    	$(openedCards[1]).addClass('animated wobble');
+    	setTimeout(function(){
+    		deck.find('.open').removeClass('show open animated wobble');
+    		deck.removeClass('no-pointer-events');
+    	}, 500);
+
+    } else {
+    	deck.find('.open').addClass('match animated rubberBand');
+    }
+    openedCards = [];
+}
+/*
+ * Call functions when card is clicked
+ */
+const clickedCard = () => {
+    displayCard();
+    pushCard();
+    if (openedCards.length === 2) {
+        compareOpenCards();
+    }
 };
 
 /*
@@ -22,9 +59,8 @@ const displayCard = (event) => {
 const displayCards = () => {
     let shuffledCards = shuffle(cards)
     shuffledCards.map(card => {
-        $(card).removeClass('show open match');
         deck.append($(card))
-        $(card).click(displayCard);
+        $(card).click(clickedCard);
     });
 };
 
@@ -32,12 +68,16 @@ displayCards();
 
 /*
  * Restart the game when restart button is clicked
- * 	- reset the cards
+ * 	- remove classes
+ *  - reset the cards
+ *  - set openedCards back to empty array
  */
 const restartGame = () => {
     $('.restart').click(function() {
+    	deck.find('.card').removeClass('show open match animated rubberBand wobble');
         displayCards();
     });
+    openedCards = [];
 };
 
 restartGame();
