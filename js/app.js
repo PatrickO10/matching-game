@@ -6,6 +6,9 @@ const cards = [...card];
 const deck = $('.deck');
 const movesEl = $('.moves');
 const timerEl = $('.timer');
+const threeStars = 42;
+const twoStars = 60;
+const oneStars = 87;
 let openedCards = [];
 let moveCounter = 0;
 let timeCounter = 0;
@@ -48,6 +51,24 @@ const compareOpenCards = () => {
     openedCards = [];
 }
 
+const stars = $('.stars');
+const starsChecker = () => {
+    if (moveCounter > threeStars && moveCounter <= twoStars) {
+        $(stars.children()[2]).children()
+            .removeClass('fa-star')
+            .addClass('fa-star-o');
+    } else if (moveCounter > twoStars && moveCounter <= oneStars) {
+        $(stars.children()[1]).children()
+            .removeClass('fa-star')
+            .addClass('fa-star-o');
+    } else if (moveCounter >= oneStars) {
+        $(stars.children()[0]).children()
+            .removeClass('fa-star')
+            .addClass('fa-star-o');
+    }
+};
+
+
 /*
  * Display move counter onto the page
  *  - update move counter
@@ -82,6 +103,7 @@ const displayTimer = () => {
  *  - push card to the array
  *  - compare card
  *  - display counter
+ *  - check stars
  */
 const clickedCard = () => {
     displayCard();
@@ -90,6 +112,7 @@ const clickedCard = () => {
         compareOpenCards();
     }
     displayCounter();
+    starsChecker();
 };
 
 /*
@@ -119,6 +142,9 @@ const restartGame = () => {
         openedCards = [];
         moveCounter = 0;
         restart = true;
+        stars.find('.fa-star-o')
+            .removeClass('fa-star-o')
+            .addClass('fa-star');
         initGame();
     });
 };
